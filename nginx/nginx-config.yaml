@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-default
+  namespace: rex-wordpress
+data:
+  default.conf: |
+    server {
+        listen 80;
+        server_name rex.com;  # 這裡換成你的個人域名
+        location / {
+            proxy_pass http://wordpress.rex-wordpress.svc.cluster.local;      #clusterIP
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
